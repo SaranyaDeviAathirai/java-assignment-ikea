@@ -17,3 +17,4 @@ public interface WarehouseStore {
 
   List<Warehouse> search(String location, Integer minCapacity, Integer maxCapacity, String sortBy,
             String sortOrder, int page, int pageSize);
+}
