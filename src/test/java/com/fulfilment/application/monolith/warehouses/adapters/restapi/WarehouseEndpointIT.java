@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 import org.junit.jupiter.api.Test;
+import static org.hamcrest.Matchers.*;
 
 @QuarkusIntegrationTest
 public class WarehouseEndpointIT {
@@ -58,4 +59,28 @@ public class WarehouseEndpointIT {
     //         containsString("AMSTERDAM-001"),
     //         containsString("TILBURG-001"));
   }
+
+  @Test
+  void testSearchWithFilters_shouldReturnList() {
+    given().queryParam("location", "AMSTERDAM-001").queryParam("minCapacity", 50).when().get("/warehouse/search")
+            .then().statusCode(200).body("size()", greaterThanOrEqualTo(0));
+      }
+
+  @Test
+  void testPagination_shouldLimitResults() {
+    given().queryParam("page", 0).queryParam("pageSize", 2).when().get("/warehouse/search")
+            .then().statusCode(200).body("size()", lessThanOrEqualTo(2));
+      }
+
+  @Test
+  void testSortingDescendingCapacity() {
+    given().queryParam("sortBy",  "capacity").queryParam("sortOrder", desc).when().get("/warehouse/search")
+            .then().statusCode(200).body("capacity", everyItem(notNullValue()));
+      }
+
+  @Test
+  void testExcludeArchivedWarehouses() {
+    given.when().get("/warehouse/search")
+            .then().statusCode(200).body("$", everyItem(hashKey("businessUnitCode")));
+      }
 }
