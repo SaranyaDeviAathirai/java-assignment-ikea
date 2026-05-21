@@ -113,7 +113,7 @@ public class WarehouseResourceImpl implements WarehouseResource {
   }
 
   @Override
-  public List<Warehouse> searchAndFilterWarehouses(String location, BigIngeter minCapacity, BigInteger maxCapacity,
+  public List<Warehouse> searchAndFilterWarehouses(String location, BigInteger minCapacity, BigInteger maxCapacity,
           String sortBy, String sortOrder, BigInteger page, BigInteger pageSize) {
 
       Integer minCap = (minCapacity != null) ? minCapacity.intValue() : null;
@@ -122,7 +122,7 @@ public class WarehouseResourceImpl implements WarehouseResource {
       int pageSizeVal = (pageSize != null) ? pageSize.intValue() : 10;
 
       List<com.fulfilment.application.monolith.warehouses.domain.models.Warehouse> results = warehouseRepository
-              .search(location, minCap, maxCap, sortBy, SortOrder, pageVal, pageSizeVal);
+              .search(location, minCap, maxCap, sortBy, sortOrder, pageVal, pageSizeVal);
       if(results == null || results.isEmpty()) {
         return List.of();
       }
