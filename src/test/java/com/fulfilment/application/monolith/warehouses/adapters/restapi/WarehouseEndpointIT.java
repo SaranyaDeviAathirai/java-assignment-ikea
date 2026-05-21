@@ -74,13 +74,13 @@ public class WarehouseEndpointIT {
 
   @Test
   void testSortingDescendingCapacity() {
-    given().queryParam("sortBy",  "capacity").queryParam("sortOrder", desc).when().get("/warehouse/search")
+    given().queryParam("sortBy",  "capacity").queryParam("sortOrder", "desc").when().get("/warehouse/search")
             .then().statusCode(200).body("capacity", everyItem(notNullValue()));
       }
 
   @Test
   void testExcludeArchivedWarehouses() {
-    given.when().get("/warehouse/search")
-            .then().statusCode(200).body("$", everyItem(hashKey("businessUnitCode")));
+    given().when().get("/warehouse/search")
+            .then().statusCode(200).body("$", everyItem(hasKey("businessUnitCode")));
       }
 }
