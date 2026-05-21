@@ -5,8 +5,8 @@ import com.fulfilment.application.monolith.warehouses.domain.ports.WarehouseStor
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
-import io.quarkus.panache.common.page;
-import io.quarkus.panache.common.sort;
+import io.quarkus.panache.common.Page;
+import io.quarkus.panache.common.Sort;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,7 +64,7 @@ public class WarehouseRepository implements WarehouseStore, PanacheRepository<Db
   }
 
   @Override
-  public List<Warehouse> search(String location, Integer mincapacity, Integer maxcapacity, String sortBy,
+  public List<Warehouse> search(String location, Integer minCapacity, Integer maxCapacity, String sortBy,
           String sortOrder, int page, int pageSize) {
     StringBuilder query = new StringBuilder("archived = false");  
     Map<String, Object> params = new HashMap<>();
