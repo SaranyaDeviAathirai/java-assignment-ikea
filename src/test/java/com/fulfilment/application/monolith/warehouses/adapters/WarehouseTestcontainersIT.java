@@ -196,4 +196,23 @@ public class WarehouseTestcontainersIT {
     warehouse.stock = 10;
     createWarehouseUseCase.create(warehouse);
   }
+
+ @Test 
+ @Transactional
+  public void testRemoveWarehouse() {
+    Warehouse warehouse = new Warehouse();
+    warehouse.businessUnitCode = "REMOVE-001";
+    warehouse.location = "AMSTERDAM-001";
+    warehouse.capacity = 100;
+    warehouse.stock = 20;
+    warehouseRepository.create(warehouse);
+
+    Warehouse existing = warehouseRepository.findByBusinessUnitCode("REMOVE-001");
+    assertNotNull(existing);
+
+    warehouseRepository.remove(warehouse);
+
+    Warehouse deleted = warehouseRepository.findByBusinessUnitCode("REMOVE-001");
+    assertNull(deleted);
+  }
 }
