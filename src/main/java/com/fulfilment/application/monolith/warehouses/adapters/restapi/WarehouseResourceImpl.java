@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.WebApplicationException;
 import java.util.List;
+import java.math.BigInteger;
 
 @RequestScoped
 public class WarehouseResourceImpl implements WarehouseResource {
@@ -109,5 +110,34 @@ public class WarehouseResourceImpl implements WarehouseResource {
     response.setStock(warehouse.stock);
 
     return response;
+  }
+
+  @Override
+  public List<Warehouse> searchAndFilterWarehouses(String location, BigIngeter minCapacity, BigInteger maxCapacity,
+          String sortBy, String sortOrder, BigInteger page, BigInteger pageSize) {
+
+      Integer minCap = (minCapacity != null) ? minCapacity.intValue() : null;
+      Integer maxCap = (maxCapacity != null) ? maxCapacity.intValue() : null;
+      int pageVal = (page != null) ? page.intValue() : 0;
+      int pageSizeVal = (pageSize != null) ? pageSize.intValue() : 10;
+
+      List<com.fulfilment.application.monolith.warehouses.domain.models.Warehouse> results = warehouseRepository
+              .search(location, minCap, maxCap, sortBy, SortOrder, pageVal, pageSizeVal);
+      if(results == null || results.isEmpty()) {
+        return List.of();
+      }
+     return results.stream().map(this::toApi).toList();
+  }
+
+  private Warehouse toApi(com.fulfilment.application.monolith.warehouses.domain.models.Warehouse domain){
+
+      Warehouse api = new  Warehouse();
+
+      api.setBusinessUnitCode(domain.businessUnitCode);
+      api.setLocation(domain.location);
+      api.setCapacity(domain.capacity);
+      api.setStock(domain.stock);
+
+    return api;
   }
 }
